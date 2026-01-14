@@ -1,0 +1,2 @@
+<?php
+// Future routing system
