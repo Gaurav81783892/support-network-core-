@@ -32,5 +32,32 @@ class AuthController {
         return $this->user->create($name, $email, $password)
             ? "success"
             : "Registration failed";
+}
+    
+}
+public function login($data) {
+    session_start();
+
+    $email = trim($data['email']);
+    $password = $data['password'];
+
+    if (empty($email) || empty($password)) {
+        return "All fields required";
     }
+
+    $user = $this->user->findByEmail($email);
+
+    if (!$user) {
+        return "Invalid login details";
+    }
+
+    if (!password_verify($password, $user['password'])) {
+        return "Invalid login details";
+    }
+
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['user_role'] = $user['role'];
+    $_SESSION['user_name'] = $user['name'];
+
+    return "success";
 }
